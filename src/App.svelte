@@ -1,5 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
 
 	// config
 	export let velocity = 500;
@@ -155,8 +154,6 @@
 			return;
 		}
 		rot = rot + 1;
-		console.log(pieces);
-		debugger;
 		if (rot === pieces[piece][0]) {
 			rot = 0;
 		}
@@ -296,27 +293,45 @@
 		newGame();
 	}
 
-	function keyMove(event) {
-		const e = event.target.innerHTML;
-		switch (e) {
-			case 'izquierda':
+	function handleKeydown(event) {
+		switch (event.key) {
+			case 'ArrowLeft':
 				movePiece(-1);
 				break;
-			case 'arriba':
+			case 'ArrowUp':
 				rotatePiece();
 				break;
-			case 'derecha':
+			case 'ArrowRight':
 				movePiece(1);
 				break;
-			case 'abajo':
+			case 'ArrowDown':
+				downPiece();
+				break;
+		}
+	}
+
+	function keyMove(e) {
+		switch (e) {
+			case 'l':
+				movePiece(-1);
+				break;
+			case 'u':
+				rotatePiece();
+				break;
+			case 'r':
+				movePiece(1);
+				break;
+			case 'd':
 				downPiece();
 				break;
 		}
 		generateView();
 	}
 
+
 </script>
 
+<svelte:body  on:keydown={handleKeydown}/>
 <main>
 	<div class="game">
 		<table class='tetris'>
@@ -335,20 +350,12 @@
 	</div>
 	<div class="actions">
 		<div class="up-container">
-			<button on:click={keyMove}>
-				arriba
-			</button>
+			<img on:click={()=>keyMove('u')} src="https://image.flaticon.com/icons/png/512/16/16259.png" alt="">
 		</div>
 		<div class="button-container">
-			<button class="container-left" on:click={keyMove}>
-				izquierda
-			</button>
-			<button on:click={keyMove}>
-				abajo
-			</button>
-			<button class="container-right" on:click={keyMove}>
-				derecha
-			</button>
+			<img style="transform: rotate(-90deg);" on:click={()=>keyMove('l')} src="https://image.flaticon.com/icons/png/512/16/16259.png" alt="">
+			<img style="transform: rotate(180deg);" on:click={()=>keyMove('d')} src="https://image.flaticon.com/icons/png/512/16/16259.png" alt="">
+			<img style="transform: rotate(90deg);" on:click={()=>keyMove('r')} src="https://image.flaticon.com/icons/png/512/16/16259.png" alt="">
 		</div>
 
 		<h3>Level: { level }</h3>
@@ -452,12 +459,12 @@
 	.up-container {
 		width: 150px;
 	}
-	.up-container>a {
+	.up-container>img {
 		margin-left: 50px;
 	}
 
 	.button-container {
-		width: 150px;
+		width: 200px;
 		height: 50px;
 	}
 
